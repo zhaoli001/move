@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>移动</title>
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		.box{
+			width:800px;
+			height:150px;
+			margin:100px auto;
+			position:relative;
+		}
+		.box div{
+			width:150px;
+			height:150px;
+			float:left;
+			position:absolute;
+			top:0;
+		}
+		.box div:nth-child(1){
+			left:0;
+		}
+		.box div:nth-child(2){
+			left:160px;
+		}
+		.box div:nth-child(3){
+			left:320px;
+		}
+		.box div:nth-child(4){
+			left:480px;
+		}
+		.box div p{
+			position: absolute;
+			width:100%;
+			bottom: 0;
+			height:20px;
+		}
+		.box div p span{
+			display: inline-block;
+			width:33.3%;
+			height:100%;
+			line-height:20px;
+			text-align: center;
+			cursor:pointer;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<div class="big" style="background:pink;">1<p><span class="left"><</span><span class="del">X</span><span class="right">></span></p></div>
+		<div class="big" style="background:lightblue;">2<p><span  class="left"><</span><span class="del">X</span><span class="right">></span></p></div>
+		<div class="big" style="background:lightgreen;">3<p><span class="left"><</span><span class="del">X</span><span class="right">></span></p></div>
+		<div class="big" style="background:yellow;">4<p><span class="left"><</span><span class="del">X</span><span class="right">></span></p></div>
+	</div>
+</body>
+</html>
+<script src="lib/jquery.js"></script>
+<script>
+	var W=$(".box div").eq(0).outerWidth(true)+10;
+		shunxu();
+	$(".box").on("click",".right",function(){
+		var Dleft=parseInt($(this).parents(".big").css("left"));
+		var Nleft=parseInt($(this).parents(".big").next().css("left"));
+		var Boxthis=$(this).parents(".big");
+		var nextthis=Boxthis.next();
+		var len=$(".box .big").length;
+			if(Boxthis.index()==len-1){
+				Boxthis.animate({"left":0+"px"},500).insertBefore($(".box .big").eq(0));
+				shunxu();
+			}
+			nextthis.animate({"left":Dleft+"px"},500)
+			Boxthis.animate({"left":Nleft+"px"},500).insertAfter(nextthis);
+	})
+
+	$(".box").on("click",".left",function(){
+		var Dleft=parseInt($(this).parents(".big").css("left"));
+		var Nleft=parseInt($(this).parents(".big").prev().css("left"));
+		var Boxthis=$(this).parents(".big");
+		var nextthis=Boxthis.prev();
+		var len=$(".box .big").length;
+			if(Boxthis.index()==0){
+				Boxthis.animate({"left":W*(len-1)+"px"},500).insertAfter($(".box .big").eq(len-1));
+				shunxu();
+			}
+			nextthis.animate({"left":Dleft+"px"},500)
+			Boxthis.animate({"left":Nleft+"px"},500).insertBefore(nextthis);
+	})
+
+	$(".box").on("click",".del",function(){
+		$(this).parents(".big").remove();
+		shunxu();
+	})
+
+	function shunxu(){
+		$(".box .big").each(function(){
+			var idx=$(this).index();
+				$(this).animate({"left":idx*W+"px"},500)
+		})
+	}
+
+</script>
